@@ -1,0 +1,67 @@
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../core-transition/core-transition.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+
+
+<polymer-element name="paper-popup" attributes="name,backgroundColor">
+    <template>
+        <paper-dialog id='popup' backdrop='true' transition="core-transition-center">
+            <style no-shim>
+                :host{
+                    position: absolute;
+                    top:10px;
+                }
+                :host /deep/ #scroller{
+                    padding: 0px;
+                    border: 3px solid {{backgroundColor}};
+                    background:white;
+                }
+                header{
+                    background: {{backgroundColor}};
+                    padding: 0px 10px;
+                }
+                #header{
+                    padding-top: 10px;
+                }
+                main{
+                    padding:10px;
+                }
+                [icon='close'] {
+                    position: absolute;
+                    top:0;right:0;
+                    color:white;
+                }
+                h1{
+                    font-size: 20px;
+                    font-family: Helvetica;
+                    margin:0;
+                    padding:0;
+                    color:white;
+                }
+            </style>
+            
+            <header id='header'>
+                <h1>{{name}}</h1>
+                <paper-icon-button icon="close"  core-overlay-toggle></paper-icon-button>
+            </header>
+            
+            <template is='auto-binding'>
+                <content></content>
+            </template>
+            
+        </paper-dialog>       
+    </template>
+    
+    <script>
+        Polymer({
+//            color: '#FFC107',
+            color: '#000',
+            backgroundColor: '#3F51B5',
+            
+            toggle: function(){
+                this.$.popup.toggle();
+            }
+        });
+    </script>
+</polymer-element>
+    

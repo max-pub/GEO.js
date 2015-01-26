@@ -1,0 +1,83 @@
+<link rel="import" href="../core-ajax/core-ajax.html">
+
+
+
+
+<polymer-element name="place-query" attributes="query,value">
+    <template>
+        <template if="{{query}}">
+            <core-ajax
+                id='ajax';
+                auto
+                url="http://maps.google.com/maps/api/geocode/json?sensor=false&address={{query}}"
+                handleAs="json"
+                on-core-response="{{handleResponse}}">
+            </core-ajax>
+        </template>
+    </template>
+    <script>
+        Polymer({
+            handleResponse:function(data){
+                var response = data.detail.response;
+                var list = this.parse(response);
+                console.log('list',list);
+                this.value = list;
+                this.fire('load', {places:list});
+            },
+            types: {
+                country:'country', 
+                administrative_area_level_1:'state', 
+                administrative_area_level_2:'county', 
+                political:'political',
+                locality:'city',  
+                postal_town:'city', 
+                sublocality:'quarter', 
+                sublocality_level_1:'quarter', 
+                neighborhood:'neighborhood', 
+                premise:'premise',
+                route:'street', 
+                street_address:'street',
+                intersection:'intersection',
+                street_number:'streetNumber', 
+                postal_code:'zipCode',
+                colloquial_area:'slang',
+                natural_feature:'POI',
+                airport:'POI',
+                park:'POI',
+                point_of_interest:'POI',
+                bus_station:'POI',
+                establishment:'establishment'
+            },
+            
+            parse: function(data){
+                var list = [];
+                var types = this.types;
+                for(var i in data.results){
+                    var dat = data.results[i];
+                    var location = {types:[]};
+                    var address = dat.address_components;
+                    for(var part in address){
+                        var typ = address[part].types[0];
+//                        console.log('part',typ,address[part]);
+                        location.types.push(typ);
+                        if(types[typ]) location[types[typ]] = address[part].long_name;
+                        if(types[typ]) location[types[typ]+'Code'] = address[part].short_name;
+                        if(location[types[typ]] == location[types[typ]+'Code']) delete location[types[typ]+'Code'];
+                    }
+                    location.string = dat.formatted_address;
+                    location.lat = dat.geometry.location.lat;
+                    location.lng = dat.geometry.location.lng;
+                    location.type = types[dat.types[0]];
+                    location.rawType = dat.types[0];
+                    location.json = JSON.stringify(location);
+//                    location.countryIcon = '/flags2/'+location.countryCode.toUpperCase()+'.png';
+//                    if(location.type=='city') location.typeIcon = 'location-city';
+            //        console.log("TYP:",dat.types[0],' -> ',location.type);
+                    list.push(location);
+                }
+                return list;
+            }
+        });
+    </script>
+</polymer-element>
+    

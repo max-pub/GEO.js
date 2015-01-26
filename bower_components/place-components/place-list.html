@@ -1,0 +1,90 @@
+<link rel="import" href="place-query.html">
+
+
+<polymer-element name="place-list" attributes="search,selected">
+    <template>
+        <style>
+            ul {
+                list-style-type: none;
+                margin:0;
+                padding:0;
+            }
+            li{
+                padding-bottom:5px;
+                border-bottom:1px solid silver;
+                margin-bottom:5px;
+            }
+            li:hover{
+                background: #ccc;
+                cursor: pointer;
+            }
+            li>div{
+                display: inline-block;
+            }
+            span{
+                display:block;
+                font-family: Helvetica;
+                font-size:14px;
+            }
+            span:first-child{
+                font-size:16px;
+            }
+            .countryImage{ width:48px;}
+            .typeImage{width:32px;}
+            .city{
+/*                font-size: 16px;*/
+/*                display: block;*/
+/*                font-family: Helvetica;*/
+            }
+            .county,.state,.country{
+/*                font-family: Courier;*/
+/*                color: gray;*/
+/*                font-size:14px;*/
+            }
+            .county{color:#777;}
+            .state{color:#999;}
+            .country{color:#bbb;}
+        </style>
+        
+        <place-query query="{{search}}" value="{{places}}"></place-query>
+        
+        <ul>
+            <template repeat="{{place in places}}">
+                <li on-tap="{{select}}" value="{{place.json}}">
+                    <img class='countryImage' src='http://max.pub/flags/{{place.countryCode}}.png'/>
+                    <div flex>
+                            <span class='poi'>{{place.POI}}</span>
+                            <span class='street'>{{place.street}} {{place.streetNumber}}</span>
+<!--                            <span class='quarter'>{{place.quarter}}</span>-->
+                            <span class='city'>{{place.city}}</span>
+<!--                            <span class='county'>&bull;{{place.county}}</span>-->
+                            <span class='state'>&bull;{{place.state}}</span>
+                            <span class='country'>&bull;{{place.country}}</span>
+                        <div class='position'>
+                        </div>
+                        <div class='street'>
+                        </div>
+                        <div class='city'>
+                        </div>
+                        <div class='area'>
+                        </div>
+                    </div>
+                    <img class='typeImage' src='http://max.pub/flags/places/{{place.type}}.png' />
+<!--                    {{place.types}}-->
+                </li>
+            </template>
+        </ul>
+    </template>
+    <script>
+        Polymer({
+            select:function(event,detail,sender){
+                this.selected = JSON.parse(sender.getAttribute('value'));
+                this.fire('selected', {place: this.selected});
+//                if(this.onselect) this.onselect(this.selected);
+                console.log('selected',this.selected);
+//                console.log('selected',p,q,r);//p.target,p.target.value);
+            }
+        });
+    </script>
+</polymer-element>
+    

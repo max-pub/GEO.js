@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+
+<head>
+
+  <title>PlaceSelector</title>
+
+  <meta name="viewport"
+    content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
+    <link rel="import" href="bower_components/polymer/polymer.html">
+    <link rel="import" href="bower_components/place-components/place-input.html">
+</head>
+    
+<body unresolved>
+    <style>
+        body{
+            padding-left: 20%;
+            padding-right: 20%;
+            padding-top: 3%;
+        }
+        html /deep/ paper-dialog{
+            top:10px;
+        }
+        .core-overlay-backdrop{
+            background:#e7e7e7;
+            opacity: 0.9;
+        }
+        paper-input-decorator /deep/ input {
+            color: white !important;
+        }            
+        paper-input-decorator /deep/ .label-text {
+            color: white;
+            font-style: italic;
+        }            
+        paper-input-decorator /deep/ .unfocused-underline {
+            background-color: white;
+        }            
+/*
+        paper-input-decorator /deep/ ::-webkit-input-placeholder {
+            color: white;
+            font-style: italic;
+        }            
+*/
+        paper-input-decorator /deep/ .focused-underline {
+            background-color: {{color}};
+        }            
+    </style>
+    
+    <h1>Place Components</h1>
+    <br/>
+    <br/>
+    <br/>
+    <polymer-element name="place-fuck" attributes="search">
+        <template>
+            <paper-input-decorator  label="Search">
+                <input is='core-input' id='search' type='search' on-keyup='{{startTimer}}'/>
+            </paper-input-decorator>            
+
+        </template>
+        <script>Polymer({});</script>
+    </polymer-element>
+    
+    
+    <place-input label='Select a place...'></place-picker>
+    <place-fuck></place-fuck>
+<!--    <place-picker></place-picker>-->
+    
+</body>
+</html>

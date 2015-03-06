@@ -1,17 +1,17 @@
-<link rel="import" href="bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="../core-ajax/core-ajax.html">
 
 
 <polymer-element name="lat-lon" attributes="position">
     <template>
         <core-ajax
-            id='ajax' 
+            id='ajax'
             auto
             url="http://www.telize.com/geoip"
             handleAs="json"
             on-core-response="{{geoipCallback}}">
         </core-ajax>
     </template>
-    
+
     <script>
         Polymer({
             ready: function(){
@@ -40,7 +40,7 @@
                 this.bestResult();
                 this.fire('geoip',this.position);
             },
-            
+
             bestResult: function(){
                 if(this.position.gps.lat){
                     this.position.lat = this.position.gps.lat;

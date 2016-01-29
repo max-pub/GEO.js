@@ -21,12 +21,8 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#~0.5.4",
-    "core-ajax": "Polymer/core-ajax#~0.5.4",
-    "paper-dialog": "Polymer/paper-dialog#~0.5.4",
-    "core-input": "Polymer/core-input#~0.5.4",
-    "core-transition": "Polymer/core-transition#~0.5.4",
-    "paper-icon-button": "Polymer/paper-icon-button#~0.5.4",
-    "core-field": "Polymer/core-field#~0.5.0"
+    "polymer": "Polymer/polymer#~1.2.3",
+    "iron-ajax": "PolymerElements/iron-ajax#~1.1.1",
+    "iron-input": "PolymerElements/iron-input#^1.0.8"
   }
 }

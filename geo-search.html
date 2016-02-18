@@ -1,0 +1,33 @@
+<script src="GEO.js"></script>
+
+<dom-module id="geo-search">
+
+    <template>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'geo-search',
+            properties: {
+                query: {
+                    type: String,
+                    observer: 'doSearch'
+                },
+                result: {
+                    type: String,
+                    notify: true
+                }
+            },
+            ready: function () {
+                bb = this;
+            },
+            doSearch: function () {
+                GEO.search(this.query, function (result) {
+                    this.set('result', result);
+                    this.fire('change', result);
+                }.bind(this));
+            }
+
+        });
+    </script>
+</dom-module>

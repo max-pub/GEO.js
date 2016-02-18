@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+
+<head>
+
+    <title>Location</title>
+
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <!--    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300' rel='stylesheet' type='text/css'>-->
+    <!--    <link href='//lib.max.pub/style/colors.min.css' rel='stylesheet' type='text/css'>-->
+    <!--    <link href='//lib.max.pub/style/font.source.min.css' rel='stylesheet' type='text/css'>-->
+    <!--    <link href='//lib.max.pub/style/base.min.css' rel='stylesheet' type='text/css'>-->
+
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../polymer/polymer.html">
+
+    <link rel="import" href="../polymer-misc/auto-search.html">
+    <link rel="import" href="../polymer-misc/json-prettify.html">
+    <link rel="import" href="geo-search.html">
+    <link rel="import" href="city-list.html">
+
+</head>
+
+<body>
+    <dom-module id='demo-tag'>
+        <style>
+            #list {
+                width: 400px;
+                border: 1px solid silver;
+            }
+        </style>
+
+        <template>
+            <auto-search value="{{query}}"></auto-search>
+            <geo-search query="{{query}}" result="{{result}}"></geo-search>
+            <city-list id='list' data="{{result}}"></city-list>
+            <json-prettify data="{{result}}"></json-prettify>
+        </template>
+    </dom-module>
+
+
+
+    <script>
+        Polymer({
+            is: 'demo-tag',
+            properties: {
+                days: {
+                    type: Array,
+                    observer: 'processData'
+                }
+            }
+
+        });
+    </script>
+
+    <demo-tag></demo-tag>
+</body>
+
+</html>

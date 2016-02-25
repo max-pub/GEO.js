@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+
+<head>
+
+    <title>GEO.js</title>
+
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <!--    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300' rel='stylesheet' type='text/css'>-->
+    <!--    <link href='//lib.max.pub/style/colors.min.css' rel='stylesheet' type='text/css'>-->
+    <!--    <link href='//lib.max.pub/style/font.source.min.css' rel='stylesheet' type='text/css'>-->
+    <!--    <link href='//lib.max.pub/style/base.min.css' rel='stylesheet' type='text/css'>-->
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../../polymer/polymer.html">
+
+    <script src="../GEO.js"></script>
+    <script src="../GEO.ip.ipinfo.js"></script>
+    <script src="../GEO.search.google.js"></script>
+
+    <link href='../../style/base.css' rel='stylesheet' type='text/css'>
+    <link href='../../style/font/source.code.300.css' rel='stylesheet' type='text/css'>
+
+    <link rel="import" href="../lat-lon.html">
+    <link rel="import" href="../geo-search.html">
+    <link rel="import" href="../../../Polymer/json-view/json-view.html">
+
+</head> 
+
+<body>
+
+    <dom-module id='demo-tag'>
+        <style>
+            #list {
+                width: 400px;
+                border: 1px solid silver;
+            }
+        </style>
+
+        <template>
+            <article class='A4'>
+                <h1>GEO.js</h1>
+
+                <h3>&lt;geo-search&gt;</h3>
+                <div>
+                    <input id='search' />
+                    <button on-click="search">search</button>
+                    <geo-search query="{{query}}" result="{{result}}"></geo-search>
+                    <json-view data="{{result}}"></json-view>
+                </div>
+
+                <h3>&lt;lat-lon&gt;</h3>
+                <div class='lat-lon'>
+                    <lat-lon ip="{{ip}}" gps="{{gps}}" result="{{location}}" name="{{locationName}}" city="{{locationCity}}"></lat-lon>
+                    <h5>IP</h5>
+                    <json-view data="{{ip}}"></json-view>
+                    <h5>GPS</h5>
+                    <json-view data="{{gps}}"></json-view>
+                    <h5>Best Result</h5>
+                    <json-view data="{{location}}"></json-view>
+                    <h5>Name</h5>
+                    <json-view data="{{locationName}}"></json-view>
+                    <h5>City</h5>
+                    <json-view data="{{locationCity}}"></json-view>
+                </div>
+    
+            </article>
+        </template>
+    </dom-module>
+
+
+
+    <script>
+        Polymer({
+            is: 'demo-tag',
+            properties: {
+            },
+            search: function(){
+                this.query = this.$.search.value;
+            }
+
+        });
+    </script>
+
+    <demo-tag></demo-tag>
+</body>
+
+</html>

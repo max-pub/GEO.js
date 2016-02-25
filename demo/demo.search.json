@@ -1,0 +1,45 @@
+[{
+    "city": "London",
+    "county": "Greater London",
+    "state": "England",
+    "country": "United Kingdom",
+    "countryCode": "GB",
+    "string": "London, UK",
+    "lat": 51.5073509,
+    "lon": -0.1277583,
+    "type": "city"
+}, {
+    "city": "London",
+    "county": "Middlesex County",
+    "state": "Ontario",
+    "stateCode": "ON",
+    "country": "Canada",
+    "countryCode": "CA",
+    "string": "London, ON, Canada",
+    "lat": 42.9869502,
+    "lon": -81.243177,
+    "type": "city"
+}, {
+    "city": "London",
+    "county": "Laurel County",
+    "state": "Kentucky",
+    "stateCode": "KY",
+    "country": "United States",
+    "countryCode": "US",
+    "string": "London, KY, USA",
+    "lat": 37.1289771,
+    "lon": -84.08326459999999,
+    "type": "city"
+}, {
+    "city": "London",
+    "county": "Madison County",
+    "state": "Ohio",
+    "stateCode": "OH",
+    "country": "United States",
+    "countryCode": "US",
+    "zipCode": "43140",
+    "string": "London, OH 43140, USA",
+    "lat": 39.8864493,
+    "lon": -83.4482529,
+    "type": "city"
+}]

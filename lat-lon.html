@@ -1,0 +1,60 @@
+
+<dom-module id="lat-lon">
+
+    <template>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'lat-lon',
+            properties: {
+                ip: {
+                    type: Object,
+                    notify: true
+                },
+                gps: {
+                    type: Object,
+                    notify: true
+                },
+                result: {
+                    type: Object,
+                    notify: true
+                },
+                name: {
+                    type: Object,
+                    notify: true
+                },
+                city: {
+                    type: Object,
+                    notify: true
+                }
+            },
+            ready: function () {
+                latlon = this;
+                GEO.ip(function(data){
+                    this.ip = data;
+                    this.fire('ip',data);
+                    this.setResult(data,'ip');
+                }.bind(this));
+                GEO.gps(function(data){
+                    this.gps = data;
+                    this.fire('gps',data);
+                    this.setResult(data,'gps');
+                }.bind(this));
+            },
+            setResult: function(data,typ){
+                if((typ=='ip')&&(this.gps)&&(this.gps.lat)) return; // when gps is already set, don't overwrite it with ip
+                this.result = data;
+                this.fire('result',data);
+                GEO.search(data.lat + ',' + data.lon, function(list) {
+                    this.name = list[0];
+                    this.fire('name', this.name);
+                    this.city = GEO.filter(list, {type:'city'})[0];
+                    this.fire('city', this.city);
+                }.bind(this));
+
+            }
+
+        });
+    </script>
+</dom-module>

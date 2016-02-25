@@ -1,11 +1,39 @@
 GEO = {
+    provider: {
+        search: {
+            demo: {
+                search: function(query, callback) {
+                    GEO.log('search.DEMO', query);
+                    GEO.ajax("demo.search.json", function(raw) {
+                        var places = JSON.parse(raw);
+                        GEO.log('search', places);
+                        if (callback) callback(places);
+                    });
+                }
+            }
+        },
+        ip: {
+            demo: function(callback) {
+                GEO.log('ip.DEMO');
+                GEO.location.ip.provider = 'demo';
+                GEO.location.ip.lat = 5.12345;
+                GEO.location.ip.lon = 5.12345;
+                if (callback) callback(GEO.location.ip);
+            }
+        }
+    },
+
+    location: {
+        ip: {},
+        gps: {}
+    },
 
 
-    ajax: function (url, callback) { // simple AJAX implementation
+    ajax: function(url, callback) { // simple AJAX implementation
         var req = new XMLHttpRequest();
         if (!req) return;
         req.open('GET', url, true);
-        req.onreadystatechange = function () {
+        req.onreadystatechange = function() {
             if (req.readyState == 4)
                 if (callback) callback(req.responseText);
         };
@@ -13,56 +41,55 @@ GEO = {
     },
 
 
-    google: { // using google maps api... implementing bing,OSM,nokia with same interface later
-        types: {
-            country: 'country',
-            administrative_area_level_1: 'state',
-            administrative_area_level_2: 'county',
-            locality: 'city',
-            sublocality: 'quarter',
-            neighborhood: 'neighborhood',
-            route: 'street',
-            street_number: 'streetNumber',
-            postal_code: 'zipCode',
-            street_address: 'street',
-            postal_town: 'city'
-        },
+    log: function(p, q) {
+        if (q) console.log('GEO.js:', p, q);
+        else console.log('GEO.js:', p);
+    },
 
-        parse: function (data) {
-            var list = [];
-            var types = GEO.google.types;
-            for (var i in data.results) {
-                var dat = data.results[i];
-                var location = {};
-                var address = dat.address_components;
-                for (var part in address) {
-                    var typ = address[part].types[0];
-                    //            console.log('part',address[part]);
-                    if (types[typ]) location[types[typ]] = address[part].long_name;
-                    if (types[typ]) location[types[typ] + 'Code'] = address[part].short_name;
-                    if (location[types[typ]] == location[types[typ] + 'Code']) delete location[types[typ] + 'Code'];
-                }
-                location.string = dat.formatted_address;
-                location.lat = dat.geometry.location.lat;
-                location.lon = dat.geometry.location.lng;
-                location.type = types[dat.types[0]];
-                //        console.log("TYP:",dat.types[0],' -> ',location.type);
-                list.push(location);
-            }
-            return list;
-        },
-        search: function (query, callback) { // call with "lat,lng,callback"   OR    "address,callback"
-            GEO.ajax("google.test.data.json", function (result) { // &language=de
-                //            GEO.ajax("http://maps.google.com/maps/api/geocode/json?sensor=true&address=" + query, function (result) { // &language=de
-                var raw = JSON.parse(result);
-                var places = GEO.google.parse(raw);
-                if (callback) callback(places, raw);
-            });
-        }
+    ip: function(callback) {
+        if (GEO.provider.ip.ipinfo_io)
+            GEO.provider.ip.ipinfo_io(callback);
+        else
+            GEO.provider.ip.demo(callback);
+    },
+
+    gps: function(callback) {
+        console.time('GEO.gps');
+        // .watchPosition     .getCurrentPosition
+        navigator.geolocation.watchPosition(function(pos) { // success
+            console.timeEnd('GEO.gps');
+            GEO.location.gps.lat = pos.coords.latitude;
+            GEO.location.gps.lon = pos.coords.longitude;
+            GEO.location.gps.accuracy = pos.coords.accuracy;
+            GEO.location.gps.raw = pos;
+            GEO.log('gps', GEO.location.gps);
+            // GEO.log(pos);
+            if (callback) callback(GEO.location.gps);
+        }, function(error) { // error
+            console.error('geo.gps.error', error)
+        });
     },
 
 
-    filter: function (loc, filter) { // filter results e.g. {type:'city'} to see just cities...
+    locate: function(callback) {
+        GEO.ip(function(data) {
+            if (GEO.location.gps.lat) return;
+            if (callback) callback(data, 'ip');
+        });
+
+        GEO.gps(callback, 'gps');
+    },
+
+    locateAndName: function(callback, filter) {
+        GEO.locate(function(data) {
+            GEO.search(data.lat + ',' + data.lon, function(list) {
+                // GEO.log('locateAndName', list[0]);
+                if (callback) callback(list[0]);
+            }, filter);
+        });
+    },
+
+    filter: function(loc, filter) { // filter results e.g. {type:'city'} to see just cities...
         var ret = [];
         for (var i = 0; i < loc.length; i++) {
             var use = true;
@@ -72,17 +99,17 @@ GEO = {
         }
         return ret;
     },
-
-
-    search: function (query, callback, filter) {
-        GEO.google.search(query, function (places) {
-            if (filter) places = GEO.filter(places, filter);
-            if (callback) callback(places);
+    searchAndFilter: function(provider, query, callback, filter) {
+        GEO.provider.search[provider].search(query, function(list) {
+            if (filter) list = GEO.filter(list, filter);
+            if (callback) callback(list);
         });
     },
-    log: function (p) {
-        console.log('GEO.js:', p);
-    }
 
-
-}
+    search: function(query, callback, filter) {
+        if (GEO.provider.search.google)
+            GEO.searchAndFilter('google', query, callback, filter);
+        else
+            GEO.searchAndFilter('demo', query, callback, filter);
+    },
+};

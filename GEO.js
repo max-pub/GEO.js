@@ -1,7 +1,7 @@
 GEO = {
     provider: {
         search: {
-            demo: {
+            demo: { // replace demo.search by function for syntax-cosistency with GeoIP
                 search: function(query, callback) {
                     GEO.log('search.DEMO', query);
                     GEO.ajax("demo.search.json", function(raw) {
@@ -23,10 +23,13 @@ GEO = {
         }
     },
 
+
+
     location: {
         ip: {},
         gps: {}
     },
+
 
 
     ajax: function(url, callback) { // simple AJAX implementation
@@ -37,6 +40,7 @@ GEO = {
             if (req.readyState == 4)
                 if (callback) callback(req.responseText);
         };
+        req.onerror = function() {}; /// replace by ADD-EVENT-HANDLER
         req.send();
     },
 
@@ -80,7 +84,7 @@ GEO = {
         GEO.gps(callback, 'gps');
     },
 
-    locateAndName: function(callback, filter) {
+    locateAndName: function(callback, filter) { // remove this -> build into locate(location, name);
         GEO.locate(function(data) {
             GEO.search(data.lat + ',' + data.lon, function(list) {
                 // GEO.log('locateAndName', list[0]);
@@ -88,6 +92,8 @@ GEO = {
             }, filter);
         });
     },
+
+
 
     filter: function(loc, filter) { // filter results e.g. {type:'city'} to see just cities...
         var ret = [];

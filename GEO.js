@@ -62,13 +62,17 @@ GEO = {
         // .watchPosition     .getCurrentPosition
         navigator.geolocation.watchPosition(function(pos) { // success
             console.timeEnd('GEO.gps');
-            GEO.location.gps.lat = pos.coords.latitude;
-            GEO.location.gps.lon = pos.coords.longitude;
+            if (pos.coords.latitude.toFixed(5) != GEO.location.gps.lat) var latDiff = true;
+            if (pos.coords.longitude.toFixed(5) != GEO.location.gps.lon) var lonDiff = true;
+
+            GEO.location.gps.lat = pos.coords.latitude.toFixed(5) * 1;
+            GEO.location.gps.lon = pos.coords.longitude.toFixed(5) * 1;
             GEO.location.gps.accuracy = pos.coords.accuracy;
             GEO.location.gps.raw = pos;
-            GEO.log('gps', GEO.location.gps);
-            // GEO.log(pos);
-            if (callback) callback(GEO.location.gps);
+            if (latDiff || lonDiff) {
+                GEO.log('gps', GEO.location.gps);
+                if (callback) callback(GEO.location.gps);
+            }
         }, function(error) { // error
             console.error('geo.gps.error', error)
         });

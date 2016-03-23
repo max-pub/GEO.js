@@ -14,16 +14,21 @@
                     observer: 'doSearch'
                 },
                 result: {
-                    type: String,
+                    type: Object,
+                    notify: true
+                },
+                first: {
+                    type: Object,
                     notify: true
                 }
             },
             ready: function () {
-                bb = this;
+                // bb = this;
             },
             doSearch: function () {
                 GEO.search(this.query, function (result) {
                     this.set('result', result);
+                    if(result) this.set('first', result[0]);
                     this.fire('change', result);
                 }.bind(this));
             }

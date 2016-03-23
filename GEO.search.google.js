@@ -33,8 +33,8 @@ GEO.provider.search.google = { // using google maps api... implementing bing,OSM
                 if (location[types[typ]] == location[types[typ] + 'Code']) delete location[types[typ] + 'Code'];
             }
             location.string = dat.formatted_address;
-            location.lat = dat.geometry.location.lat;
-            location.lon = dat.geometry.location.lng;
+            location.lat = dat.geometry.location.lat.toFixed(5) * 1;
+            location.lon = dat.geometry.location.lng.toFixed(5) * 1;
             location.type = types[dat.types[0]];
             //        console.log("TYP:",dat.types[0],' -> ',location.type);
             list.push(location);

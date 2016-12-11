@@ -13,12 +13,29 @@ GEO = {
             }
         },
         ip: {
-            demo: function(callback) {
-                GEO.log('ip.DEMO');
-                GEO.location.ip.provider = 'demo';
-                GEO.location.ip.lat = 5.12345;
-                GEO.location.ip.lon = 5.12345;
-                if (callback) callback(GEO.location.ip);
+            default: 'max_pub',
+            ipinfo_io: function(callback) {
+                GEO.ajax('http://ipinfo.io/json/', function(data) {
+                    data = JSON.parse(data);
+                    var latlon = data.loc.split(',');
+                    GEO.location.ip = {
+                        ip: data.ip,
+                        country: data.country,
+                        region: data.region,
+                        city: data.city,
+                        lat: (latlon[0] * 1).toFixed(2),
+                        lon: (latlon[1] * 1).toFixed(2),
+                        provider: 'ipinfo.io'
+                    };
+                    if (callback) callback(GEO.location.ip);
+                });
+            },
+            max_pub: function(callback) {
+                GEO.ajax('https://api.max.pub/geoip/', function(data) {
+                    data = JSON.parse(data);
+                    GEO.location.ip = data;
+                    if (callback) callback(GEO.location.ip);
+                });
             }
         }
     },
@@ -51,10 +68,7 @@ GEO = {
     },
 
     ip: function(callback) {
-        if (GEO.provider.ip.ipinfo_io)
-            GEO.provider.ip.ipinfo_io(callback);
-        else
-            GEO.provider.ip.demo(callback);
+        GEO.provider.ip[GEO.provider.ip.default](callback);
     },
 
     gps: function(callback) {

@@ -42,7 +42,7 @@ GEO.provider.search.google = { // using google maps api... implementing bing,OSM
         return list;
     },
     search: function(query, callback) { // call with "lat,lng,callback"   OR    "address,callback"
-        GEO.ajax("http://maps.google.com/maps/api/geocode/json?sensor=true&address=" + query, function(result) { // &language=de
+        GEO.ajax("https://maps.google.com/maps/api/geocode/json?sensor=true&address=" + query, function(result) { // &language=de
             var raw = JSON.parse(result);
             var places = GEO.provider.search.google.parse(raw);
             if (callback) callback(places, raw);
